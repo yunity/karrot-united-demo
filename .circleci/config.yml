@@ -48,10 +48,11 @@ jobs:
           name: prepare backend
           command: |
             set -x
+            apt-get update && apt-get install -y virtualenv
             cd server
-            pip install --upgrade pip
-            pip install -r requirements-dev.txt
-            pip-sync requirements*.txt
+            env/bin/pip install --upgrade pip
+            env/bin/pip install -r requirements-dev.txt
+            env/bin/pip-sync requirements*.txt
             cp config/local_settings.py.ci config/local_settings.py
       - persist_to_workspace:
           root: ~/repo
@@ -66,10 +67,10 @@ jobs:
       - run: backend test
         command: |
           set -x
-          coverage run manage.py test
-          flake8 ./
-          coverage html -d $CIRCLE_ARTIFACTS
-          pip install codecov && codecov
+          env/bin/coverage run manage.py test
+          env/bin/flake8 ./
+          env/bin/coverage html -d $CIRCLE_ARTIFACTS
+          env/bin/pip install codecov && env/bin/codecov
 
   e2e-test:
     <<: *defaults
@@ -81,8 +82,8 @@ jobs:
           command: |
             set -x
             cd server
-            python manage.py migrate
-            python manage.py runserver
+            env/bin/python manage.py migrate
+            env/bin/python manage.py runserver
           background: true
       - run:
           name: run frontend
