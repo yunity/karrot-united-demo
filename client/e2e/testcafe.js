@@ -2,7 +2,9 @@ const createTestCafe = require('testcafe')
 const { join } = require('path')
 const isCI = process.argv.includes('--ci')
 const browsers = isCI ? [
+  'chrome',
   'firefox',
+  'chromium',
 //  'saucelabs:Chrome@61:Windows 10',
 //  'saucelabs:Firefox@56:Windows 10',
 //  'saucelabs:Internet Explorer@11.103:Windows 10',
