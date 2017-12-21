@@ -1,0 +1,287 @@
+{
+  "GLOBAL": {
+    "GITHUB_NOTE": "Desarrollo",
+    "FACEBOOK_NOTE": "Únete a nuestro grupo de Facebook",
+    "WARNING": "Advertencia",
+    "BETA_WARNING": "Este sitio está en construcción y todo puede ser modificado. No podemos garantizar la seguridad y privacidad de sus datos (pero intentamos dar lo mejor de nosotros).",
+    "CONNECTION_INTERRUPTED": "Error: conexión interrumpida",
+    "SERVER_ERROR": "Error del servidor"
+  },
+  "USERDATA": {
+    "EMAIL": "Correo",
+    "PROFILE_TITLE": "Perfil",
+    "PASSWORD": "Contraseña",
+    "USERNAME": "Nombre",
+    "WHERE_FROM": "Where you are from (not required)"
+  },
+  "BUTTON": {
+    "CREATE": "Crear",
+    "CANCEL": "Cancelar",
+    "DELETE": "Eliminar",
+    "EDIT": "Editar",
+    "JOIN": "Unirse",
+    "LEAVE": "Salir",
+    "PREVIEW": "Vista previa",
+    "BACK": "Atrás",
+    "MORE_OPTIONS": "Más opciones",
+    "SEARCH": "Buscar",
+    "OF_COURSE": "Si, claro!",
+    "YES": "Si",
+    "SAVE_CHANGES": "Guardar cambios",
+    "RESET": "Reiniciar",
+    "CHANGE_PASSWORD": "Nueva contraseña",
+    "CHANGE_EMAIL": "Cambiar correo electrónico",
+    "AGREE": "Estoy de acuerdo ",
+    "REMOVE": "Quitar",
+    "ARCHIVE": "Archivo"
+  },
+  "VALIDATION": {
+    "MINLENGTH": "Por favor introduce más que {min} caracteres.",
+    "MAXLENGTH": "Demasiado largo, por favor, usa menos que {max} caracteres.",
+    "UNIQUE": "Este nombre ya existe, por favor elige otro. ",
+    "REQUIRED": "Este campo es obligado. ",
+    "VALID_EMAIL": "Introduce un correo electrónico válido.",
+    "VALID_TIMEZONE": "Introduce una zona horaria válida."
+  },
+  "GROUP": {
+    "WALL": "Muro ",
+    "GROUP": "Grupo",
+    "LEAVE": "Abandonar grupo...",
+    "LEAVE_TEXT": "¿De verdad quiere abandonar este grupo?",
+    "LEAVE_CONFIRMATION": "Has salido de {groupName}",
+    "NONMEMBER_REDIRECT": "No eres un miembro de este grupo. ",
+    "EDIT": "Editar grupo",
+    "CREATE_TITLE": "Crear un grupo nuevo",
+    "MANAGE_AGREEMENT": "Manage agreement",
+    "TITLE": "Título de este grupo",
+    "DESCRIPTION_VERBOSE": "Descripción del grupo, visible para los miembros",
+    "PUBLIC_DESCRIPTION": "Texto visible antes de unirse al grupo",
+    "PASSWORD": "Introducir contraseña aquí para hacer el grupo privado",
+    "PICKUPS": "Recogidas",
+    "MEMBERS": "Miembros",
+    "STORES": "Tiendas",
+    "HISTORY": "Historia",
+    "DESCRIPTION": "Descripción",
+    "ADDRESS": "Dirección",
+    "TIMEZONE": "Zona horaria del grupo",
+    "INVITE_EMAIL": "Introducir un correo electrónico",
+    "INVITE_SEND": "Enviar invitación",
+    "INVITED_LIST": "Ya se enviaron invitaciones a los siguientes correos electrónicos: ",
+    "ALREADY_INVITED": "Ya se envió una invitación a este correo electrónico. ",
+    "INVITE_TITLE": "Invitar usuarios a tu grupo",
+    "INVITATION_ACCEPT_SUCCESS": "Bienvenid@! Has acceptado la invitación. ",
+    "INVITATION_ACCEPT_ERROR": "Ooops, no se podía aceptar la invitación!"
+  },
+  "GROUPMAP": {
+    "TITLE": "Mapa",
+    "SHOW_USERS": "Enseñar usuarios",
+    "HIDE_USERS": "Ocultar usuarios",
+    "SHOW_STORES": "Enseñar tiendas",
+    "HIDE_STORES": "Ocultar tiendas",
+    "SET_LOCATION": "Set location"
+  },
+  "STOREDETAIL": {
+    "EDIT": "Editar tienda",
+    "MANAGE": "Check and manage the pickups",
+    "ARCHIVED": "Esta tienda se archivó."
+  },
+  "STOREEDIT": {
+    "NAME": "Nombre",
+    "STATUS":"Status",
+    "DESCRIPTION": "Descripción",
+    "ADDRESS": "Dirección",
+    "WEEKS_IN_ADVANCE": "How many weeks in advance should recurring pickup dates be shown?",
+    "DIALOGS": {
+      "ARCHIVE": {
+        "TITLE": "Archivar tienda",
+        "MESSAGE": "Estás segur@?",
+        "CONFIRM": "Si, archivar tienda"
+      }
+    },
+    "RESTORE": "Restore"
+  },
+  "PICKUPMANAGE": {
+    "TITLE": "Manejar recogidas",
+    "SERIES": "Recurring",
+    "SINGLE": "One-time pickups",
+    "UPCOMING_PICKUPS_IN_SERIES": "Upcoming pickups in this series"
+  },
+  "PICKUPDELETE": {
+    "DELETE_SERIES_TITLE": "Delete recurring pickup date",
+    "DELETE_SERIES_TEXT": "Do you really want to delete this recurring pickup date? This will also delete all one-time pickup dates that belong to this recurring pickup date (except where people joined already)."
+  },
+  "USERDETAIL": {
+    "DISPLAY_NAME": "Nombre",
+    "DESCRIPTION": "Sobre usted",
+    "PASSWORD": "Introducir contraseña nueva"
+  },
+  "PROFILE": {
+    "INACCESSIBLE_OR_DELETED": "(User inaccessible or deleted)"
+  },
+  "JOINGROUP": {
+    "WHICHGROUP": "¿A qué grupo quiere unirse?",
+    "NUM_MEMBERS": "Miembro | Miembros",
+    "NO_PUBLIC_DESCRIPTION": "(Este grupo no tiene una descripción pública... todavía)",
+    "PASSWORD_LABEL": "Introducir contraseña para grupo privado",
+    "PASSWORD_REQUIRED": "Este grupo requiere contraseña",
+    "PASSWORD_WRONG": "Contraseña errónea",
+    "ALL_GROUPS": "Todos los grupos",
+    "SIGNUP_OR_LOGIN": "Log in or sign up to join this group!",
+    "MY_GROUPS": "Mis grupos",
+    "LOGOUT_MESSAGE": {
+      "LOGGED_OUT": "You are currently logged out. {login}",
+      "LOG_IN": "Iniciar sesión para ver tus grupos!"
+    },
+    "PROFILE_NOTE": "Si te unes a este grupo tus datos de perfil serán visibles para otros miembros del grupo. "
+  },
+  "GROUPINFO": {
+    "META": "Enseñar información pública del grupo",
+    "MEMBER_VIEW": "You are member of this group. Click here to switch to full view."
+  },
+  "TOPBAR": {
+    "LOGOUT": "Cerrar sesión",
+    "USERPROFILE": "Visitar perfil",
+    "CHANGE_GROUP": "Cambiar el grupo"
+  },
+  "LOGIN": {
+    "TITLE": "Iniciar sesión",
+    "SUBMIT": "Iniciar sesión",
+    "SIGNUP": "¡Únase!",
+    "FORGOT_PASSWORD": "¿Olvidó la contraseña?"
+  },
+  "SIGNUP": {
+    "TITLE": "¡Únase!",
+    "BACK": "Volver al inicio",
+    "OK": "Unirse"
+  },
+  "VERIFYMAIL": {
+    "TITLE": "Verificación del correo",
+    "SUCCESS": "¡Su dirección de correo ha sido verificada!",
+    "ERROR": "Algo fue mal ¿Quizás su dirección de correo ya está verificada?"
+  },
+  "CREATEPICKUP": {
+    "WEEKDAYS": "Día de la semana",
+    "WEEKDAYS_HELPER": "On which days should the pick-up take place?",
+    "TIME": "Hora",
+    "TIME_HELPER": "When should the pick-up take place?",
+    "DATE": "Fecha",
+    "DATE_HELPER": "When should the pick-up take place?",
+    "MAX_COLLECTORS": "Máx ranuras",
+    "MAX_COLLECTORS_HELPER": "Cuántas personas deberían participar en la recogida?",
+    "COMMENT": "Información adicional",
+    "COMMENT_HELPER": "What should people know when signing up to this pick-up?"
+  },
+  "CREATESTORE": {
+    "TITLE": "Crear una nueva tienda"
+  },
+  "PICKUPLIST": {
+    "EMPTYNOTICE": "There is one empty pickup in the next days waiting for you! | There are {count} empty pickups in the next days waiting for you!",
+    "JOINEDNOTICE": "Tienes una recogida pendiente | Tienes {count} recogidas pendientes",
+    "ITEM": {
+      "LEAVE": "Salir",
+      "JOIN": "Unirse",
+      "JOIN_CONFIRMATION_HEADER": "Unirse a la recogida",
+      "JOIN_CONFIRMATION_TEXT": "Estás segurx que tienes tiempo para hacer la recogida el {date}?",
+      "LEAVE_CONFIRMATION_HEADER": "Dejar la recogida",
+      "LEAVE_CONFIRMATION_TEXT": "Estás segurx que lxs otrxs pueden hacer la recogida sin ti?"
+    },
+    "NONE": "Ninguna recogida inminente",
+    "NONE_HINT": "Puede crear una nueva recogida en la página de la tienda"
+  },
+  "PICKUP_FEEDBACK": {
+    "HEADER": "Gracias por tu recogida!",
+    "SUBTITLE": "You can provide feedback for your pickup here",
+    "AMOUNT": "Cantidad de alimentos que te llevaste (en kg)",
+    "COMMENT": "Comentario",
+    "COMMENT_PLACEHOLDER": "Fue todo bien? Se vino todo el mundo? Tu comentario aquí..."
+  },
+  "PASSWORDRESET": {
+    "TITLE": "Resetear contraseña",
+    "INTRO": "Introduzca su correo electrónico y le enviaremos una nueva contraseña (si su cuenta está registrada).",
+    "EMAIL": "Dirección de correo electrónico",
+    "SUBMIT": "Conseguir nueva contraseña",
+    "LOGIN": "Volver a la página de inicio",
+    "SUCCESS": "Se ha enviado la solicitud correctamente. Compruebe su correo electrónico."
+  },
+  "LANGUAGECHOOSER": {
+    "ADD_MORE": "¡Añadir más idiomas!"
+  },
+  "MARKDOWN_INPUT": {
+    "BOLD": "negrita",
+    "ITALIC": "cursiva",
+    "STRIKE": "strike",
+    "QUOTE": "quote",
+    "HELP": "Qué es Markdown?"
+  },
+  "HISTORY": {
+    "GROUP_CREATE": "creó este grupo",
+    "GROUP_MODIFY": "cambió los ajustes de este grupo",
+    "GROUP_JOIN": "se unió a este grupo",
+    "GROUP_LEAVE": "se fue de este grupo",
+    "STORE_CREATE": "creyó la tienda {name}",
+    "STORE_MODIFY": "cambió los ajustes de la tienda {name}",
+    "STORE_DELETE": "borró la tienda {name}",
+    "PICKUP_CREATE": "created a new one-time pick-up",
+    "PICKUP_MODIFY": "changed the settings of a pick-up",
+    "PICKUP_DELETE": "eliminó una recogida",
+    "SERIES_CREATE": "created a new recurring pick-up",
+    "SERIES_MODIFY": "changed the settings of a recurring pick-up",
+    "SERIES_DELETE": "deleted a recurring pick-up",
+    "PICKUP_DONE": "hizo una recogida en {storeName}",
+    "PICKUP_MISSED": "Faltó una recogida en {storeName}!",
+    "PICKUP_JOIN": "se apuntó a una recogida en {storeName}",
+    "PICKUP_LEAVE": "stepped back from doing a pick-up at {storeName}",
+    "NOTHING_HAPPENEND": "Todavía nada ha pasado...",
+    "DETAILS": "Más información "
+  },
+  "NOTIFICATIONS": {
+    "TITLE": "Notificatiónes",
+    "NOT_VERIFIED": "{email} no está verificado ",
+    "CHECK_YOUR_MAILS": "Por favor, chequea tu correo electrónico o {enviar de nuevo}",
+    "RESEND_VERIFICATION": "Enviar verificación de correo otra vez",
+    "VERIFICATION_EMAIL_SENT": "Se te envió otro correo electrónico de verificación. Por favor, chequea tu buzón. "
+  },
+  "NOT_FOUND": {
+    "EXPLANATION": "¡Perdona! No podíamos encontrar esta página. ",
+    "HOME": "Volver al inicio"
+  },
+  "SETTINGS": {
+    "TITLE": "Settings"
+  },
+  "AGREEMENT": {
+    "NEW": "Nuevo acuerdo",
+    "AGREE": "Tienes que aceptar {title}",
+    "VIEW": "Ver acuerdo",
+    "TITLE": "Título",
+    "TITLE_HELPER": "Dále un título a tu acuerdo, p. ej. Reglas del Grupo",
+    "CONTENT": "Contenido",
+    "CONTENT_HELPER": "El texto para vuestro acuerdo",
+    "MINOR_EDIT": "Minor edit?",
+    "MINOR_EDIT_HELPER": "Typos, formatting, etc... people will not be asked to re-agree",
+    "BLURB1": "Todavia no hay un acuerdo!",
+    "BLURB2": "Si añades un acuerdo la gente tendrá que aceptarlo antes de poder hacer recogidas. ",
+    "DIALOGS": {
+      "REPLACE": {
+        "TITLE": "Cambiar el acuerdo?",
+        "MESSAGE": "Todxs tendrán que aceptar el acuerdo de nuevo antes de poder apuntarse a las recogidas",
+        "CONFIRM": "Si, cambiar el acuerdo"
+      },
+      "REMOVE": {
+        "TITLE": "Eliminar el acuerdo?",
+        "MESSAGE": "Esto significa que todxs podrán hacer recogidas",
+        "CONFIRM": "Si, eliminar el acuerdo"
+      }
+    }
+  },
+  "WALL": {
+    "WRITE_MESSAGE": "Escribir un mensaje...",
+    "WRITE_FIRST_MESSAGE": "Enviar el primer mensaje..."
+  },
+  "STORESTATUS":{
+    "ACTIVE": "En cooperación",
+    "CREATED": "Recien creado",
+    "NEGOTIATING": "En negociación",
+    "DECLINED": "No está dispuesta a cooperar",
+    "ARCHIVED": "Archivado"
+  }
+}

@@ -1,0 +1,287 @@
+{
+  "GLOBAL": {
+    "GITHUB_NOTE": "Ellaboro",
+    "FACEBOOK_NOTE": "Join our Facebook Group!",
+    "WARNING": "Averto",
+    "BETA_WARNING": "Ĉi tiu retpaĝo estas sub aktiva ellaboro kaj ĉio povas ŝanĝiĝi. Ni ne povas certigi la sekurecon kaj privatecon de via enigitaj datenoj (sed ni klopodas tiel bone kiel eble)",
+    "CONNECTION_INTERRUPTED": "Eraro: aliro interrompita!",
+    "SERVER_ERROR": "Eraro servila"
+  },
+  "USERDATA": {
+    "EMAIL": "Retadreso",
+    "PROFILE_TITLE": "Profile",
+    "PASSWORD": "Pasvorto",
+    "USERNAME": "Nomo",
+    "WHERE_FROM": "Where you are from (not required)"
+  },
+  "BUTTON": {
+    "CREATE": "Krei",
+    "CANCEL": "Nuligi",
+    "DELETE": "Forigi",
+    "EDIT": "Redakti",
+    "JOIN": "Ensaluti",
+    "LEAVE": "Eliri",
+    "PREVIEW": "Antaŭvido",
+    "BACK": "Back",
+    "MORE_OPTIONS": "More options",
+    "SEARCH": "Search",
+    "OF_COURSE": "Yes, of course!",
+    "YES": "Yes",
+    "SAVE_CHANGES": "Save changes",
+    "RESET": "Reset",
+    "CHANGE_PASSWORD": "Change password",
+    "CHANGE_EMAIL": "Change e-mail address",
+    "AGREE": "I agree",
+    "REMOVE": "Remove",
+    "ARCHIVE": "Archive"
+  },
+  "VALIDATION": {
+    "MINLENGTH": "Please enter more than {min} characters.",
+    "MAXLENGTH": "Too long, please use less than {max} characters.",
+    "UNIQUE": "Name already exists, please choose another.",
+    "REQUIRED": "This field is required.",
+    "VALID_EMAIL": "Enter a valid e-mail address.",
+    "VALID_TIMEZONE": "Enter a valid timezone."
+  },
+  "GROUP": {
+    "WALL": "Wall",
+    "GROUP": "Group",
+    "LEAVE": "Forlasi la grupon…",
+    "LEAVE_TEXT": "Ĉu vi vere volas eliri la grupon?",
+    "LEAVE_CONFIRMATION": "You left {groupName}",
+    "NONMEMBER_REDIRECT": "You are not a member of this group.",
+    "EDIT": "Redakti grupon",
+    "CREATE_TITLE": "Krei novan grupon",
+    "MANAGE_AGREEMENT": "Manage agreement",
+    "TITLE": "Titolo de ĉi tiu grupo",
+    "DESCRIPTION_VERBOSE": "Grupa preskribo, membrovidebla",
+    "PUBLIC_DESCRIPTION": "Teksto videbla antaŭ aliĝi al la grupo",
+    "PASSWORD": "Entajpi pasvorton ĉi tien se vi volas privatigi la grupon",
+    "PICKUPS": "Kolektoj",
+    "MEMBERS": "Anoj",
+    "STORES": "Vendejoj",
+    "HISTORY": "History",
+    "DESCRIPTION": "Priskribo",
+    "ADDRESS": "Adreso",
+    "TIMEZONE": "Horzono de la grupo",
+    "INVITE_EMAIL": "Enter an e-mail address",
+    "INVITE_SEND": "Send invitation",
+    "INVITED_LIST": "Invitations have already been sent out to these e-mail addresses:",
+    "ALREADY_INVITED": "An invitation has already been sent to this e-mail address",
+    "INVITE_TITLE": "Invite users to your group",
+    "INVITATION_ACCEPT_SUCCESS": "Welcome! You successfully accepted the invitation.",
+    "INVITATION_ACCEPT_ERROR": "Ooops, could not accept the invitation!"
+  },
+  "GROUPMAP": {
+    "TITLE": "Map",
+    "SHOW_USERS": "Show users",
+    "HIDE_USERS": "Hide users",
+    "SHOW_STORES": "Show stores",
+    "HIDE_STORES": "Hide stores",
+    "SET_LOCATION": "Set location"
+  },
+  "STOREDETAIL": {
+    "EDIT": "Redakti vendejon",
+    "MANAGE": "Check and manage the pickups",
+    "ARCHIVED": "This store has been archived"
+  },
+  "STOREEDIT": {
+    "NAME": "Nomo",
+    "STATUS":"Status",
+    "DESCRIPTION": "Priskribo",
+    "ADDRESS": "Adreso",
+    "WEEKS_IN_ADVANCE": "Antaŭ kiom da semajnoj devus esti montritaj periodaj forkolektaj rendevuojn?",
+    "DIALOGS": {
+      "ARCHIVE": {
+        "TITLE": "Archive store",
+        "MESSAGE": "Are you sure?",
+        "CONFIRM": "Yes, archive store"
+      }
+    },
+    "RESTORE": "Restore"
+  },
+  "PICKUPMANAGE": {
+    "TITLE": "Manage pickups",
+    "SERIES": "Recurring",
+    "SINGLE": "One-time pickups",
+    "UPCOMING_PICKUPS_IN_SERIES": "Upcoming pickups in this series"
+  },
+  "PICKUPDELETE": {
+    "DELETE_SERIES_TITLE": "Delete recurring pickup date",
+    "DELETE_SERIES_TEXT": "Do you really want to delete this recurring pickup date? This will also delete all one-time pickup dates that belong to this recurring pickup date (except where people joined already)."
+  },
+  "USERDETAIL": {
+    "DISPLAY_NAME": "Nomo",
+    "DESCRIPTION": "Pri vi",
+    "PASSWORD": "Entajpu vian pasvorton"
+  },
+  "PROFILE": {
+    "INACCESSIBLE_OR_DELETED": "(User inaccessible or deleted)"
+  },
+  "JOINGROUP": {
+    "WHICHGROUP": "Al kiu grupo vi volas aliĝi?",
+    "NUM_MEMBERS": "Member | Members",
+    "NO_PUBLIC_DESCRIPTION": "(Ĉi tiu grupo havas neniun priskribo… ankoraŭ)",
+    "PASSWORD_LABEL": "Entajpu pasvorton por privatan grupon",
+    "PASSWORD_REQUIRED": "Ĉi tiu grupo bezonas pasvorton",
+    "PASSWORD_WRONG": "Vi misentajpis la pasvorton",
+    "ALL_GROUPS": "All groups",
+    "SIGNUP_OR_LOGIN": "Log in or sign up to join this group!",
+    "MY_GROUPS": "My groups",
+    "LOGOUT_MESSAGE": {
+      "LOGGED_OUT": "You are currently logged out. {login}",
+      "LOG_IN": "Log in to see your groups!"
+    },
+    "PROFILE_NOTE": "By joining this group, your profile data will become visible to other group members."
+  },
+  "GROUPINFO": {
+    "META": "Show public group information",
+    "MEMBER_VIEW": "You are member of this group. Click here to switch to full view."
+  },
+  "TOPBAR": {
+    "LOGOUT": "Elsaluti",
+    "USERPROFILE": "Vizitu vian profilon",
+    "CHANGE_GROUP": "Change group"
+  },
+  "LOGIN": {
+    "TITLE": "Ensaluti",
+    "SUBMIT": "Ensaluti",
+    "SIGNUP": "Aliĝu!",
+    "FORGOT_PASSWORD": "Ĉu vi forgesis vian pasvorton?"
+  },
+  "SIGNUP": {
+    "TITLE": "Registriĝu!",
+    "BACK": "Reen al ensalutpaĝo",
+    "OK": "Aliĝi"
+  },
+  "VERIFYMAIL": {
+    "TITLE": "Retpostkontrolo",
+    "SUCCESS": "Via retadreso estis sukcese konfirmita!",
+    "ERROR": "Io misfunkciis. Ĉu eble via retadreso jam estis konfirmita?"
+  },
+  "CREATEPICKUP": {
+    "WEEKDAYS": "Semajntagoj",
+    "WEEKDAYS_HELPER": "On which days should the pick-up take place?",
+    "TIME": "Tempo",
+    "TIME_HELPER": "When should the pick-up take place?",
+    "DATE": "Date",
+    "DATE_HELPER": "When should the pick-up take place?",
+    "MAX_COLLECTORS": "Maks Lokoj",
+    "MAX_COLLECTORS_HELPER": "How many people should participate in the pick-up?",
+    "COMMENT": "Additional information",
+    "COMMENT_HELPER": "What should people know when signing up to this pick-up?"
+  },
+  "CREATESTORE": {
+    "TITLE": "Krei novan vendejon"
+  },
+  "PICKUPLIST": {
+    "EMPTYNOTICE": "There is one empty pickup in the next days waiting for you! | There are {count} empty pickups in the next days waiting for you!",
+    "JOINEDNOTICE": "You have one upcoming pickup | You have {count} upcoming pickups",
+    "ITEM": {
+      "LEAVE": "Forlasi",
+      "JOIN": "Aliĝi",
+      "JOIN_CONFIRMATION_HEADER": "Join Pickup",
+      "JOIN_CONFIRMATION_TEXT": "Are you sure you have time to pick up on {date}?",
+      "LEAVE_CONFIRMATION_HEADER": "Leave Pickup",
+      "LEAVE_CONFIRMATION_TEXT": "Are you really sure the others can do the pickup without you?"
+    },
+    "NONE": "Neniu venonta forkolekto",
+    "NONE_HINT": "Vi povas krei novan forkolekton en la vendeja paĝo."
+  },
+  "PICKUP_FEEDBACK": {
+    "HEADER": "Thank you for your pickup!",
+    "SUBTITLE": "You can provide feedback for your pickup here",
+    "AMOUNT": "Amount of food you took home (in kg)",
+    "COMMENT": "Comment",
+    "COMMENT_PLACEHOLDER": "Was everything fine? Did everyone show up? Your comment here..."
+  },
+  "PASSWORDRESET": {
+    "TITLE": "Pasvorta restarigo",
+    "INTRO": "Entajpu vian retadreson kaj ni sendos novan pasvorton al vi (se vi jam registriĝis)",
+    "EMAIL": "Retpostadreso",
+    "SUBMIT": "Ricevi novan pasvorton",
+    "LOGIN": "Reen al ensalutpaĝo",
+    "SUCCESS": "La peto sukcese sendiĝis. Kontrolu vian retposton!"
+  },
+  "LANGUAGECHOOSER": {
+    "ADD_MORE": "Aldoni pli da lingvoj!"
+  },
+  "MARKDOWN_INPUT": {
+    "BOLD": "grasa",
+    "ITALIC": "kursiva",
+    "STRIKE": "trastreko",
+    "QUOTE": "cito",
+    "HELP": "Kio estas Markdaŭno?"
+  },
+  "HISTORY": {
+    "GROUP_CREATE": "created this group",
+    "GROUP_MODIFY": "changed the settings of this group",
+    "GROUP_JOIN": "joined this group",
+    "GROUP_LEAVE": "left this group",
+    "STORE_CREATE": "created store {name}",
+    "STORE_MODIFY": "changed the settings of store {name}",
+    "STORE_DELETE": "deleted store {name}",
+    "PICKUP_CREATE": "created a new one-time pick-up",
+    "PICKUP_MODIFY": "changed the settings of a pick-up",
+    "PICKUP_DELETE": "deleted a pick-up",
+    "SERIES_CREATE": "created a new recurring pick-up",
+    "SERIES_MODIFY": "changed the settings of a recurring pick-up",
+    "SERIES_DELETE": "deleted a recurring pick-up",
+    "PICKUP_DONE": "did a pick-up at {storeName}",
+    "PICKUP_MISSED": "A pickup at {storeName} was missed!",
+    "PICKUP_JOIN": "signed up to do a pick-up at {storeName}",
+    "PICKUP_LEAVE": "stepped back from doing a pick-up at {storeName}",
+    "NOTHING_HAPPENEND": "Nothing happened so far...",
+    "DETAILS": "More information"
+  },
+  "NOTIFICATIONS": {
+    "TITLE": "Notifications",
+    "NOT_VERIFIED": "{email} not verified",
+    "CHECK_YOUR_MAILS": "Please check your emails or {resend}",
+    "RESEND_VERIFICATION": "resend verification email",
+    "VERIFICATION_EMAIL_SENT": "We sent you another verification mail. Please check your inbox."
+  },
+  "NOT_FOUND": {
+    "EXPLANATION": "Sorry, we couldn't find this page anywhere.",
+    "HOME": "Take me home"
+  },
+  "SETTINGS": {
+    "TITLE": "Settings"
+  },
+  "AGREEMENT": {
+    "NEW": "New agreement",
+    "AGREE": "You must agree to {title}",
+    "VIEW": "View agreement",
+    "TITLE": "Title",
+    "TITLE_HELPER": "Give your agreement a title, e.g. Community Rules",
+    "CONTENT": "Content",
+    "CONTENT_HELPER": "The text of your agreement",
+    "MINOR_EDIT": "Minor edit?",
+    "MINOR_EDIT_HELPER": "Typos, formatting, etc... people will not be asked to re-agree",
+    "BLURB1": "You don't have an agreement yet!",
+    "BLURB2": "If you add one then people will have to agree to it before they can do pickups.",
+    "DIALOGS": {
+      "REPLACE": {
+        "TITLE": "Change agreement?",
+        "MESSAGE": "Everyone will have to agree again before they can signup for pickups",
+        "CONFIRM": "Yes, change agreement"
+      },
+      "REMOVE": {
+        "TITLE": "Remove agreement?",
+        "MESSAGE": "This means anyone will be able to do a pickup",
+        "CONFIRM": "Yes, remove agreement"
+      }
+    }
+  },
+  "WALL": {
+    "WRITE_MESSAGE": "Write a message...",
+    "WRITE_FIRST_MESSAGE": "Write the first message..."
+  },
+  "STORESTATUS":{
+    "ACTIVE": "Co-operating",
+    "CREATED": "Just created",
+    "NEGOTIATING": "Negotiating",
+    "DECLINED": "Don't want to cooperate",
+    "ARCHIVED": "Archived"
+  }
+}
