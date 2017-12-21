@@ -178,3 +178,4 @@ workflows:
       - e2e-test:
           requires:
             - backend-test
+            - build
