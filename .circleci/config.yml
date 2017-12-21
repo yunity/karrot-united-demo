@@ -52,6 +52,7 @@ jobs:
             cd server
             virtualenv -p python3 env
             env/bin/pip install --upgrade pip
+            env/bin/pip install --upgrade setuptools
             env/bin/pip install -r requirements-dev.txt
             env/bin/pip-sync requirements*.txt
             cp config/local_settings.py.ci config/local_settings.py
