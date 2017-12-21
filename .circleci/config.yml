@@ -66,15 +66,16 @@ jobs:
     steps:
       - attach_workspace:
           at: ~/repo
-      - run: backend test
-        command: |
-          set -x
-          sudo apt-get update && sudo apt-get install -y virtualenv
-          cd server
-          env/bin/coverage run manage.py test
-          env/bin/flake8 ./
-          env/bin/coverage html -d $CIRCLE_ARTIFACTS
-          env/bin/pip install codecov && env/bin/codecov
+      - run:
+          name: backend test
+          command: |
+            set -x
+            sudo apt-get update && sudo apt-get install -y virtualenv
+            cd server
+            env/bin/coverage run manage.py test
+            env/bin/flake8 ./
+            env/bin/coverage html -d $CIRCLE_ARTIFACTS
+            env/bin/pip install codecov && env/bin/codecov
 
   e2e-test:
     <<: *defaults
