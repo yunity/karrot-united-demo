@@ -48,7 +48,7 @@ jobs:
           name: prepare backend
           command: |
             set -x
-            apt-get update && apt-get install -y virtualenv
+            sudo apt-get update && sudo apt-get install -y virtualenv
             cd server
             env/bin/pip install --upgrade pip
             env/bin/pip install -r requirements-dev.txt
