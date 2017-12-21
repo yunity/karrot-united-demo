@@ -2,6 +2,8 @@
 
 Welcome to _karrot_! _karrot_ is a software to support foodsaving groups worldwide. A live deploy can be used on [karrot.world](https://karrot.world).
 
+![](karrot-group.png)
+
 
 ## foodsaving worldwide
 
