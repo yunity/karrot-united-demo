@@ -20,10 +20,10 @@ jobs:
           keys:
           - v1-dependencies-{{ checksum "client/package.json" }}
           - v1-dependencies-
-      - run: yarn
+      - run: cd client && yarn
       - save_cache:
           paths:
-            - node_modules
+            - client/node_modules
           key: v1-dependencies-{{ checksum "client/package.json" }}
       - persist_to_workspace:
           root: ~/repo
@@ -49,9 +49,9 @@ jobs:
             set -x
             cd server
             virtualenv -p python3 env
-            env/bin/pip install --upgrade pip
-            env/bin/pip install -r requirements-dev.txt
-            env/bin/pip-sync requirements*.txt
+            pip install --upgrade pip
+            pip install -r requirements-dev.txt
+            pip-sync requirements*.txt
             cp config/local_settings.py.ci config/local_settings.py
       - persist_to_workspace:
           root: ~/repo
@@ -81,8 +81,8 @@ jobs:
           command: |
             set -x
             cd server
-            env/bin/python manage.py migrate
-            env/bin/python manage.py runserver
+            python manage.py migrate
+            python manage.py runserver
           background: true
       - run:
           name: run frontend
