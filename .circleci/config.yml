@@ -74,8 +74,8 @@ jobs:
             cd server
             env/bin/coverage run manage.py test
             env/bin/flake8 ./
-            env/bin/coverage html -d $CIRCLE_ARTIFACTS
-            env/bin/pip install codecov && env/bin/codecov
+            env/bin/coverage html
+            bash <(curl -s https://codecov.io/bash)
 
   e2e-test:
     <<: *defaults
