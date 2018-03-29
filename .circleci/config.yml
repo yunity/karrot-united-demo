@@ -1,181 +1,123 @@
-aliases:
-  - &defaults
-    working_directory: ~/repo
-    docker:
-      - image: circleci/python:3.5.4-node-browsers
-        environment:
-          PGHOST: 127.0.0.1
-      - image: circleci/postgres:9.6.2
-        environment:
-          POSTGRES_USER: ubuntu
-          POSTGRES_DB: fstool_e2etest
-      - image: redis:3.2.11
-
 version: 2
+
+defaults: &defaults
+  docker:
+    - image: circleci/node:8.2.1
+  working_directory: ~/build-root
+
 jobs:
-  install-dependencies:
+  clone_and_hash:
     <<: *defaults
     steps:
       - checkout
       - restore_cache:
           keys:
-          - v1-dependencies-{{ checksum "client/package.json" }}
-          - v1-dependencies-
-      - run: cd client && yarn
+            - v1-project-metadata-{{ .Branch }}
+            - v1-project-metadata-master
+
+      - run:
+          name: Initialize project metadata
+          command: |
+            mkdir -p .project-metadata
+            touch .client-hash .server-hash
+
+      - run:
+          name: Hash projects
+          command: |
+            git log --pretty=format:'%H' -n 1 -- client > .client-hash.new
+            git log --pretty=format:'%H' -n 1 -- server > .server-hash.new
+
+      - run:
+          name: Determine changed projects
+          command: |
+            if ! diff .client-hash{,.new} > /dev/null; then
+              touch .project-metadata/.client-changed
+            fi
+
+            if ! diff .server-hash{,.new} > /dev/null; then
+              touch .project-metadata/.server-changed
+            fi
+
+      - run:
+          name: Set current project hashes
+          command: |
+            mv .client-hash{.new,}
+            mv .server-hash{.new,}
+
+      - persist_to_workspace:
+          root: .
+          paths:
+            - .project-metadata
+
       - save_cache:
+          key: v1-project-metadata-{{ .Branch }}-{{ epoch }}
           paths:
-            - client/node_modules
-          key: v1-dependencies-{{ checksum "client/package.json" }}
-      - persist_to_workspace:
-          root: ~/repo
-          paths:
-            - .
+            - .client-hash
+            - .server-hash
 
-  test:
+  client:
     <<: *defaults
+    working_directory: ~/build-root/client
     steps:
-      - attach_workspace:
-          at: ~/repo
-      - run: cd client && yarn test --ci --runInBand
-      - run: cd client && bash <(curl -s https://codecov.io/bash)
-
-  install-e2e-dependencies:
-    <<: *defaults
-    steps:
-      - attach_workspace:
-          at: ~/repo
+      - checkout: { path: ~/build-root }
+      - attach_workspace: { at: . }
       - run:
-          name: prepare backend
+          name: Check whether client changed
           command: |
-            set -x
-            sudo apt-get update && sudo apt-get install -y virtualenv
-            cd server
-            virtualenv -p python3 env
-            env/bin/pip install --upgrade pip
-            env/bin/pip install --upgrade setuptools
-            env/bin/pip install -r requirements-dev.txt
-            env/bin/pip-sync requirements*.txt
-            cp config/local_settings.py.ci config/local_settings.py
-      - persist_to_workspace:
-          root: ~/repo
-          paths:
-            - server/*
+            if [ -e .project-metadata/.client-changed ]; then
+              echo "let's do this"
+            else
+              echo "nothing to do"
+            fi
 
-  backend-test:
-    <<: *defaults
-    steps:
-      - attach_workspace:
-          at: ~/repo
       - run:
-          name: backend test
+          name: Install dependencies
+          command: echo "install"
+
+      - run:
+          name: Build
+          command: echo "Building Client"
+
+      - run:
+          name: Test
+          command: echo "Testing Client"
+
+  server:
+    <<: *defaults
+    working_directory: ~/build-root/server
+    steps:
+      - checkout: { path: ~/build-root }
+      - attach_workspace: { at: . }
+      - run:
+          name: Check whether server changed
           command: |
-            set -x
-            sudo apt-get update && sudo apt-get install -y virtualenv
-            cd server
-            env/bin/coverage run manage.py test
-            env/bin/flake8 ./
-            env/bin/coverage html
-            bash <(curl -s https://codecov.io/bash)
+            if [ -e .project-metadata/.server-changed ]; then
+              echo "let's do this"
+            else
+              echo "nothing to do"
+            fi
 
-  e2e-test:
-    <<: *defaults
-    steps:
-      - attach_workspace:
-          at: ~/repo
       - run:
-          name: run backend
-          command: |
-            set -x
-            cd server
-            sudo apt-get update && sudo apt-get install -y virtualenv
-            env/bin/python manage.py migrate
-            env/bin/python manage.py runserver
-          background: true
-      - run:
-          name: run frontend
-          command: cd client && yarn serve
-          background: true
-      - run:
-          name: wait for frontend to get ready
-          command: wget --retry-connrefused -T 30 http://localhost:8080
-      - run:
-          name: wait for backend to get ready
-          command: wget --retry-connrefused -T 30 http://localhost:8000/api/groups-info/
-      - run:
-          name: list all available browsers for your personal benefit
-          command: cd client && $(yarn bin)/testcafe -b saucelabs
-          background: true
-      - run:
-          name: testcafe
-          command: cd client && yarn e2e --ci
+          name: Install dependencies
+          command: echo "install"
 
-  lint:
-    <<: *defaults
-    steps:
-      - attach_workspace:
-          at: ~/repo
-      - run: cd client && yarn lint
+      - run:
+          name: Build
+          command: echo "Building Server"
 
-  build:
-    <<: *defaults
-    steps:
-      - attach_workspace:
-          at: .
-      - run: cd client && yarn build
-      - persist_to_workspace:
-          root: ~/repo
-          paths:
-            - client/dist
-
-  build-storybook:
-    <<: *defaults
-    steps:
-      - attach_workspace:
-          at: .
-      - run: cd client && yarn build-storybook
-      - persist_to_workspace:
-          root: ~/repo
-          paths:
-            - client/storybook-static
-
-  build-docs:
-    <<: *defaults
-    steps:
-      - attach_workspace:
-          at: .
-      - run: cd client && yarn build-docs
-      - persist_to_workspace:
-          root: ~/repo
-          paths:
-            - client/docs-dist
+      - run:
+          name: Test
+          command: echo "Testing Server"
 
 workflows:
   version: 2
-  all-the-things:
+
+  build_test_deploy:
     jobs:
-      - install-dependencies
-      - test:
+      - clone_and_hash
+      - client:
           requires:
-            - install-dependencies
-      - lint:
+            - clone_and_hash
+      - server:
           requires:
-            - install-dependencies
-      - build:
-          requires:
-            - install-dependencies
-      - build-storybook:
-          requires:
-            - install-dependencies
-      - build-docs:
-          requires:
-            - install-dependencies
-      - install-e2e-dependencies:
-          requires:
-            - install-dependencies
-      - backend-test:
-          requires:
-            - install-e2e-dependencies
-      - e2e-test:
-          requires:
-            - backend-test
-            - build
+            - clone_and_hash
