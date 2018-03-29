@@ -16,19 +16,19 @@ jobs:
             - v1-project-metadata-master
 
       - run:
-          name: Initialize project metadata
+          name: Initialize metadata
           command: |
             mkdir -p .project-metadata
             touch .client-hash .server-hash
 
       - run:
-          name: Hash projects
+          name: Get latest commit of projects
           command: |
-            git log --pretty=format:'%H' -n 1 -- client > .client-hash.new
-            git log --pretty=format:'%H' -n 1 -- server > .server-hash.new
+            git log --pretty=format:'%H' -n 1 -- client | tee .client-hash.new
+            git log --pretty=format:'%H' -n 1 -- server | tee .server-hash.new
 
       - run:
-          name: Determine changed projects
+          name: Determine changes
           command: |
             if ! diff .client-hash{,.new} > /dev/null; then
               touch .project-metadata/.client-changed
@@ -39,7 +39,7 @@ jobs:
             fi
 
       - run:
-          name: Set current project hashes
+          name: Update last built commit of projects
           command: |
             mv .client-hash{.new,}
             mv .server-hash{.new,}
