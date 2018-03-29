@@ -80,7 +80,7 @@ jobs:
 
       - run:
           name: Test
-          command: run-test.sh
+          command: ./run-test.sh
 
   server:
     <<: *defaults
@@ -107,7 +107,7 @@ jobs:
 
       - run:
           name: Test
-          command: run-test.sh
+          command: ./run-test.sh
 
 workflows:
   version: 2
