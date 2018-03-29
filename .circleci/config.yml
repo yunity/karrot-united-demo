@@ -18,53 +18,52 @@ jobs:
       - run:
           name: Initialize metadata
           command: |
-            mkdir -p .project-metadata
-            touch .client-hash .server-hash
+            touch {client,server,docs}/.commit-hash
 
       - run:
           name: Get latest commit of projects
           command: |
-            git log --pretty=format:'%H' -n 1 -- client | tee .client-hash.new
-            git log --pretty=format:'%H' -n 1 -- server | tee .server-hash.new
+            git log --pretty=format:'%H' -n 1 -- client | tee client/.commit-hash.new
+            git log --pretty=format:'%H' -n 1 -- server | tee server/.commit-hash.new
+            git log --pretty=format:'%H' -n 1 -- docs | tee docs/.commit-hash.new
 
       - run:
           name: Determine changes
           command: |
-            if ! diff .client-hash{,.new} > /dev/null; then
-              touch .project-metadata/.client-changed
+            if ! diff client/.commit-hash{,.new} > /dev/null; then
+              touch client/.changed
             fi
 
-            if ! diff .server-hash{,.new} > /dev/null; then
-              touch .project-metadata/.server-changed
+            if ! diff server/.commit-hash{,.new} > /dev/null; then
+              touch server/.changed
             fi
 
-      - run:
-          name: Update last built commit of projects
-          command: |
-            mv .client-hash{.new,}
-            mv .server-hash{.new,}
+            if ! diff docs/.commit-hash{,.new} > /dev/null; then
+              touch docs/.changed
+            fi
 
       - persist_to_workspace:
           root: .
           paths:
-            - .project-metadata
+            - .
 
       - save_cache:
-          key: v1-project-metadata-{{ .Branch }}-{{ epoch }}
+          key: v1-project-metadata-{{ .Branch }}-{{ .BuildNum }}
           paths:
-            - .client-hash
-            - .server-hash
+            - client/.commit-hash
+            - server/.commit-hash
+            - docs/.commit-hash
 
   client:
     <<: *defaults
     working_directory: ~/build-root/client
     steps:
       - checkout: { path: ~/build-root }
-      - attach_workspace: { at: . }
+      - attach_workspace: { at: ~/build-root }
       - run:
           name: Check whether client changed
           command: |
-            if [ -e .project-metadata/.client-changed ]; then
+            if [ -e .changed ]; then
               echo "let's do this"
             else
               echo "nothing to do"
@@ -87,11 +86,11 @@ jobs:
     working_directory: ~/build-root/server
     steps:
       - checkout: { path: ~/build-root }
-      - attach_workspace: { at: . }
+      - attach_workspace: { at: ~/build-root }
       - run:
           name: Check whether server changed
           command: |
-            if [ -e .project-metadata/.server-changed ]; then
+            if [ -e .changed ]; then
               echo "let's do this"
             else
               echo "nothing to do"
