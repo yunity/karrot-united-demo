@@ -8,9 +8,9 @@ import subprocess
 import os
 
 def get_workflows(branch):
-    r = requests.get('https://circleci.com/api/v1.1/project/github/yunity/karrot-frontend/tree/{}?limit=100'.format(branch))
+    r = requests.get('https://circleci.com/api/v1.1/project/github/yunity/karrot-united-demo/tree/{}?limit=100'.format(branch))
     j = r.json()
-    
+
     workflows = {}
     workflows_sorted = []
     for job in j:
@@ -20,7 +20,7 @@ def get_workflows(branch):
         workflows[w_id]['jobs'].append(job)
         if w_id not in workflows_sorted:
             workflows_sorted.append(w_id)
-            
+
     return [workflows[w_id] for w_id in workflows_sorted]
 
 
@@ -38,17 +38,17 @@ def get_first_finished_workflow(workflows):
             break
 
     return workflow
-        
-            
+
+
 branch = os.environ.get('CIRCLE_BRANCH')
 workflow = None
 if branch:
     workflow = get_first_finished_workflow(get_workflows(branch))
 if workflow is None:
-    workflow = get_first_finished_workflow(get_workflows('master'))    
+    workflow = get_first_finished_workflow(get_workflows('master'))
 
 changed_files = subprocess.check_output(['git', 'diff', workflow['commit'], 'HEAD', '--name-only']).decode().split()
-    
+
 output = []
 changed_tpl = 'export {project}_CHANGED={val}'
 success_tpl = 'export {project}_SUCCESS={val}'
@@ -57,6 +57,5 @@ for project in projects:
     success = workflow[project]['success']
     output.append(changed_tpl.format(project=project.upper(), val=1 if changed else 0))
     output.append(success_tpl.format(project=project.upper(), val=1 if success else 0))
-    
+
 print('\n'.join(output))
-    
