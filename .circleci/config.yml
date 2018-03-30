@@ -10,49 +10,21 @@ jobs:
     <<: *defaults
     steps:
       - checkout
-      - restore_cache:
-          keys:
-            - v1-project-metadata-{{ .Branch }}
-            - v1-project-metadata-master
 
       - run:
           name: Initialize metadata
           command: |
-            touch {client,server,docs}/.commit-hash
+            ./find_changed_projects.py | tee -a $BASH_ENV
 
       - run:
-          name: Get latest commit of projects
+          name: try out
           command: |
-            git log --pretty=format:'%H' -n 1 -- client | tee client/.commit-hash.new
-            git log --pretty=format:'%H' -n 1 -- server | tee server/.commit-hash.new
-            git log --pretty=format:'%H' -n 1 -- docs | tee docs/.commit-hash.new
-
-      - run:
-          name: Determine changes
-          command: |
-            if ! diff client/.commit-hash{,.new} > /dev/null; then
-              touch client/.changed
-            fi
-
-            if ! diff server/.commit-hash{,.new} > /dev/null; then
-              touch server/.changed
-            fi
-
-            if ! diff docs/.commit-hash{,.new} > /dev/null; then
-              touch docs/.changed
-            fi
-
-      - persist_to_workspace:
-          root: .
-          paths:
-            - .
-
-      - save_cache:
-          key: v1-project-metadata-{{ .Branch }}-{{ .BuildNum }}
-          paths:
-            - client/.commit-hash
-            - server/.commit-hash
-            - docs/.commit-hash
+            echo $CLIENT_CHANGED
+            echo $CLIENT_SUCCESS
+            echo $DOCS_CHANGED
+            echo $DOCS_SUCCESS
+            echo $SERVER_CHANGED
+            echo $SERVER_SUCCESS
 
   client:
     <<: *defaults
@@ -63,7 +35,7 @@ jobs:
       - run:
           name: Check whether client changed
           command: |
-            if [ -e .changed ]; then
+            if [ "$CLIENT_CHANGED"=1 ]; then
               echo "let's do this"
             else
               echo "nothing to do"
@@ -90,7 +62,7 @@ jobs:
       - run:
           name: Check whether server changed
           command: |
-            if [ -e .changed ]; then
+            if [ "$SERVER_CHANGED"=1 ]; then
               echo "let's do this"
             else
               echo "nothing to do"
