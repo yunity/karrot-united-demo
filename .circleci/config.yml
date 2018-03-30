@@ -2,7 +2,7 @@ version: 2
 
 defaults: &defaults
   docker:
-    - image: circleci/node:8.2.1
+    - image: circleci/python:3-stretch
   working_directory: ~/build-root
 
 jobs:
