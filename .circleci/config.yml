@@ -14,7 +14,9 @@ jobs:
       - run:
           name: Initialize metadata
           command: |
-            ./.circleci/find_changed_projects.py | tee -a $BASH_ENV
+            virtualenv blaenv
+            blaenv/bin/pip install requests
+            blaenv/bin/python .circleci/find_changed_projects.py | tee -a $BASH_ENV
 
       - run:
           name: try out
