@@ -30,8 +30,8 @@ jobs:
       - run:
           name: Check whether client changed
           command: |
-            if [ -e ci-meta/not_changed ]; then
-              if [ -e ci-meta/success ]; then
+            if [ -e ci_meta/not_changed ]; then
+              if [ -e ci_meta/success ]; then
                 exit 0
               else
                 exit 1
@@ -61,8 +61,8 @@ jobs:
       - run:
           name: Check whether server changed
           command: |
-            if [ -e ci-meta/not_changed ]; then
-              if [ -e ci-meta/success ]; then
+            if [ -e ci_meta/not_changed ]; then
+              if [ -e ci_meta/success ]; then
                 exit 0
               else
                 exit 1
@@ -92,8 +92,8 @@ jobs:
       - run:
           name: Check whether docs changed
           command: |
-            if [ -e ci-meta/not_changed ]; then
-              if [ -e ci-meta/success ]; then
+            if [ -e ci_meta/not_changed ]; then
+              if [ -e ci_meta/success ]; then
                 exit 0
               else
                 exit 1
