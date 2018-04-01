@@ -19,9 +19,9 @@ jobs:
             blaenv/bin/python .circleci/find_changed_projects.py
 
       - persist_to_workspace:
-        root: .
-        paths:
-          - .
+          root: .
+          paths:
+            - .
   client:
     <<: *defaults
     working_directory: ~/build-root/client
