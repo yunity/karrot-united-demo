@@ -16,31 +16,28 @@ jobs:
           command: |
             virtualenv blaenv
             blaenv/bin/pip install requests
-            blaenv/bin/python .circleci/find_changed_projects.py | tee -a $BASH_ENV
+            blaenv/bin/python .circleci/find_changed_projects.py
 
-      - run:
-          name: try out
-          command: |
-            echo $CLIENT_CHANGED
-            echo $CLIENT_SUCCESS
-            echo $DOCS_CHANGED
-            echo $DOCS_SUCCESS
-            echo $SERVER_CHANGED
-            echo $SERVER_SUCCESS
-
+      - persist_to_workspace:
+        root: .
+        paths:
+          - .
   client:
     <<: *defaults
     working_directory: ~/build-root/client
     steps:
-      - checkout: { path: ~/build-root }
       - attach_workspace: { at: ~/build-root }
       - run:
           name: Check whether client changed
           command: |
-            if [ "$CLIENT_CHANGED" = "1" ]; then
-              echo "let's do this"
+            if [ -e ci-meta/not_changed ]; then
+              if [ -e ci-meta/success ]; then
+                exit 0
+              else
+                exit 1
+              fi
             else
-              echo "nothing to do"
+              echo "run tests"
             fi
 
       - run:
@@ -64,10 +61,14 @@ jobs:
       - run:
           name: Check whether server changed
           command: |
-            if [ "$SERVER_CHANGED" = "1" ]; then
-              echo "let's do this"
+            if [ -e ci-meta/not_changed ]; then
+              if [ -e ci-meta/success ]; then
+                exit 0
+              else
+                exit 1
+              fi
             else
-              echo "nothing to do"
+              echo "run tests"
             fi
 
       - run:
@@ -91,10 +92,14 @@ jobs:
       - run:
           name: Check whether docs changed
           command: |
-            if [ "$DOCS_CHANGED" = "1" ]; then
-              echo "let's do this"
+            if [ -e ci-meta/not_changed ]; then
+              if [ -e ci-meta/success ]; then
+                exit 0
+              else
+                exit 1
+              fi
             else
-              echo "nothing to do"
+              echo "run tests"
             fi
 
       - run:
@@ -119,5 +124,8 @@ workflows:
           requires:
             - clone_and_hash
       - server:
+          requires:
+            - clone_and_hash
+      - docs:
           requires:
             - clone_and_hash

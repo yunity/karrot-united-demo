@@ -49,13 +49,18 @@ if workflow is None:
 
 changed_files = subprocess.check_output(['git', 'diff', workflow['commit'], 'HEAD', '--name-only']).decode().split()
 
-output = []
-changed_tpl = 'export {project}_CHANGED={val}'
-success_tpl = 'export {project}_SUCCESS={val}'
+def touch(filename):
+    with open(filename, 'a') as f:
+        f.write('')
+
 for project in projects:
     changed = any(f.startswith(project + '/') for f in changed_files)
     success = workflow[project]['success']
-    output.append(changed_tpl.format(project=project.upper(), val=1 if changed else 0))
-    output.append(success_tpl.format(project=project.upper(), val=1 if success else 0))
 
-print('\n'.join(output))
+    if not changed:
+        touch('{}/ci_meta/not_changed'.format(project))
+        print(project, 'not changed')
+
+    if success:
+        touch('{}/ci_meta/success'.format(project))
+        print(project, 'successful')
