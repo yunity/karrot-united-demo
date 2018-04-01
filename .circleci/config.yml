@@ -31,12 +31,8 @@ jobs:
       - run:
           name: Check whether client changed
           command: |
-            if [ -e ci_meta/not_changed ]; then
-              if [ -e ci_meta/success ]; then
-                exit 0
-              else
-                exit 1
-              fi
+            if [ -e ci_meta/not_changed ] && [ -e ci_meta/success ]; then
+             exit 0
             else
               echo "run tests"
             fi
@@ -62,12 +58,8 @@ jobs:
       - run:
           name: Check whether server changed
           command: |
-            if [ -e ci_meta/not_changed ]; then
-              if [ -e ci_meta/success ]; then
-                exit 0
-              else
-                exit 1
-              fi
+            if [ -e ci_meta/not_changed ] && [ -e ci_meta/success ]; then
+             exit 0
             else
               echo "run tests"
             fi
@@ -93,12 +85,8 @@ jobs:
       - run:
           name: Check whether docs changed
           command: |
-            if [ -e ci_meta/not_changed ]; then
-              if [ -e ci_meta/success ]; then
-                exit 0
-              else
-                exit 1
-              fi
+            if [ -e ci_meta/not_changed ] && [ -e ci_meta/success ]; then
+             exit 0
             else
               echo "run tests"
             fi
