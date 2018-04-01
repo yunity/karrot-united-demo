@@ -6,6 +6,7 @@ projects = ['client', 'server', 'docs']
 import requests
 import subprocess
 import os
+from pprint import pprint
 
 def get_workflows(branch):
     r = requests.get('https://circleci.com/api/v1.1/project/github/yunity/karrot-united-demo/tree/{}?limit=100'.format(branch))
@@ -41,6 +42,11 @@ def get_first_finished_workflow(workflows):
     return workflow
 
 
+def touch(filename):
+    with open(filename, 'a') as f:
+        f.write('')
+
+
 branch = os.environ.get('CIRCLE_BRANCH')
 workflow = None
 if branch:
@@ -48,13 +54,10 @@ if branch:
 if workflow is None:
     workflow = get_first_finished_workflow(get_workflows('master'))
 
-print('got status from workflow', workflow['id'], workflow)
+print('got status from workflow', workflow['id'])
+pprint(workflow)
 
 changed_files = subprocess.check_output(['git', 'diff', workflow['commit'], 'HEAD', '--name-only']).decode().split()
-
-def touch(filename):
-    with open(filename, 'a') as f:
-        f.write('')
 
 for project in projects:
     changed = any(f.startswith(project + '/') for f in changed_files)
