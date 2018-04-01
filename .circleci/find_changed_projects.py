@@ -16,7 +16,7 @@ def get_workflows(branch):
     for job in j:
         w_id = job['workflows']['workflow_id']
         if not workflows.get(w_id):
-            workflows[w_id] = {'jobs': []}
+            workflows[w_id] = {'jobs': [], 'id': w_id}
         workflows[w_id]['jobs'].append(job)
         if w_id not in workflows_sorted:
             workflows_sorted.append(w_id)
@@ -27,6 +27,7 @@ def get_workflows(branch):
 def get_first_finished_workflow(workflows):
     workflow = None
     for workflow in workflows:
+        print('analyzing workflow', workflow['id'])
         workflow['finished'] = all(e['lifecycle']=='finished' for e in workflow['jobs'])
         workflow['commit'] = workflow['jobs'][0]['vcs_revision']
         for project in projects:
@@ -46,6 +47,8 @@ if branch:
     workflow = get_first_finished_workflow(get_workflows(branch))
 if workflow is None:
     workflow = get_first_finished_workflow(get_workflows('master'))
+
+print('got status from workflow', workflow['id'], workflow)
 
 changed_files = subprocess.check_output(['git', 'diff', workflow['commit'], 'HEAD', '--name-only']).decode().split()
 
