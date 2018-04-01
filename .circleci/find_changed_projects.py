@@ -57,6 +57,8 @@ for project in projects:
     changed = any(f.startswith(project + '/') for f in changed_files)
     success = workflow[project]['success']
 
+    os.mkdir('{}/ci_meta'.format(project))
+
     if not changed:
         touch('{}/ci_meta/not_changed'.format(project))
         print(project, 'not changed')
