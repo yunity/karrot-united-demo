@@ -37,7 +37,7 @@ jobs:
       - run:
           name: Check whether client changed
           command: |
-            if [ "$CLIENT_CHANGED"=1 ]; then
+            if [ "$CLIENT_CHANGED" = "1" ]; then
               echo "let's do this"
             else
               echo "nothing to do"
@@ -64,7 +64,7 @@ jobs:
       - run:
           name: Check whether server changed
           command: |
-            if [ "$SERVER_CHANGED"=1 ]; then
+            if [ "$SERVER_CHANGED" = "1" ]; then
               echo "let's do this"
             else
               echo "nothing to do"
@@ -77,6 +77,33 @@ jobs:
       - run:
           name: Build
           command: echo "Building Server"
+
+      - run:
+          name: Test
+          command: ./run-test.sh
+
+  docs:
+    <<: *defaults
+    working_directory: ~/build-root/docs
+    steps:
+      - checkout: { path: ~/build-root }
+      - attach_workspace: { at: ~/build-root }
+      - run:
+          name: Check whether docs changed
+          command: |
+            if [ "$DOCS_CHANGED" = "1" ]; then
+              echo "let's do this"
+            else
+              echo "nothing to do"
+            fi
+
+      - run:
+          name: Install dependencies
+          command: echo "install"
+
+      - run:
+          name: Build
+          command: echo "Building docs"
 
       - run:
           name: Test
