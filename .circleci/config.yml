@@ -18,6 +18,7 @@ build-android: &build-android
   command: |
     if [ -e ci_meta/not_changed ] && [ -e ci_meta/success ]; then
       echo "skip step"
+      touch ~/build-root/client/android-${CORDOVA_ENV}.apk
       exit 0
     fi
     rm -f cordova/www
@@ -128,6 +129,7 @@ jobs:
           command: |
             if [ -e ci_meta/not_changed ] && [ -e ci_meta/success ]; then
               echo "skip step"
+              mkdir dist-dev
               exit 0
             fi
             rm -r dist || true
@@ -165,6 +167,7 @@ jobs:
           command: |
             if [ -e ci_meta/not_changed ] && [ -e ci_meta/success ]; then
               echo "skip step"
+              mkdir dist-prod
               exit 0
             fi
             rm -r dist || true
@@ -222,6 +225,7 @@ jobs:
           command: |
             if [ -e ci_meta/not_changed ] && [ -e ci_meta/success ]; then
               echo "skip step"
+              mkdir dist-app-dev
               exit 0
             fi
             rm -r dist || true
@@ -431,6 +435,7 @@ jobs:
           command: |
             if [ -e ci_meta/not_changed ] && [ -e ci_meta/success ]; then
               echo "skip step"
+              mkdir docs-dist
               exit 0
             fi
             yarn
