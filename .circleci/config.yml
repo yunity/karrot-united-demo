@@ -514,8 +514,8 @@ workflows:
           requires:
             - client-test
             - client-lint
-            - client-build-dev
             - client-build-storybook
+            - end-to-end
       - client-build-cordova-dev:
           requires:
             - client-dependencies
@@ -524,15 +524,18 @@ workflows:
             - client-build-cordova-dev
       - client-deploy-android-dev:
           requires:
-            - client-test
-            - client-lint
             - client-build-android-dev
+            - end-to-end
       - production-approval:
           type: approval
+          filters:
+            branches:
+              only:
+                - master
           requires:
             - client-deploy-dev
             - server-deploy-dev
-            - end-to-end
+            - client-deploy-android-dev
       - client-build-prod:
           requires:
             - production-approval
@@ -557,7 +560,8 @@ workflows:
               only:
                 - master
           requires:
-            - server-test
+            - client-test
+            - end-to-end
       - server-deploy-karrot-world:
           requires:
             - production-approval
