@@ -1,5 +1,8 @@
 #!/bin/bash
 
+echo "do client deploy"
+exit 0
+
 set -e
 
 HOST=yuca.yunity.org
@@ -23,6 +26,7 @@ if [ "$DIR" == "release" ]; then
   DEPLOY_ENV="production"
   DEPLOY_EMOJI=":rocket:"
   URL="https://karrot.world"
+  BUILD_DIR="dist-prod"
 
 elif [ "$REF" == "master" ]; then
 
@@ -33,6 +37,7 @@ elif [ "$REF" == "master" ]; then
   URL="https://dev.karrot.world"
   STORYBOOK_URL="https://storybook.karrot.world"
   DEPLOY_DOCS="true"
+  BUILD_DIR="dist-dev"
 
 else
 
@@ -61,7 +66,7 @@ echo "$about_json" > dist/about.json
 echo "$about_json" > storybook-static/about.json
 
 # send it all to the host
-rsync -avz --delete dist/ "deploy@$HOST:karrot-frontend/$DIR/"
+rsync -avz --delete $BUILD_DIR "deploy@$HOST:karrot-frontend/$DIR/"
 rsync -avz --delete storybook-static/ "deploy@$HOST:karrot-frontend-storybook/$DIR/"
 
 if [ "$DEPLOY_DOCS" == "true" ] && [ -d docs-dist ]; then

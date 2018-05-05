@@ -1,5 +1,8 @@
 #!/bin/bash
 
+echo "do server deploy"
+exit 0
+
 set -e
 
 HOST=yuca.yunity.org

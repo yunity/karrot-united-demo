@@ -1,120 +1,564 @@
-version: 2
-
 defaults: &defaults
-  docker:
-    - image: circleci/python:3-stretch
   working_directory: ~/build-root
+  docker:
+    - image: karrot/python:1.5
 
+client_defaults: &client_defaults
+  working_directory: ~/build-root/client
+  docker:
+    - image: circleci/node:8.10
+
+android-defaults: &android-defaults
+  working_directory: ~/build-root/client
+  docker:
+    - image: karrot/android-build:api-27-node8-alpha
+
+build-android: &build-android
+  name: build android
+  command: |
+    if [ -e ci_meta/not_changed ] && [ -e ci_meta/success ]; then
+      exit 0
+    fi
+    rm -f cordova/www
+    mv dist-app-${CORDOVA_ENV} cordova/www
+    cd ~/build-root/client/cordova
+    rm -f config/current
+    ln -s "$CORDOVA_ENV" config/current
+    cordova platform add android
+    ./build android "$CORDOVA_ENV" release "${!PASSWORD_VAR}"
+    mv platforms/android/build/outputs/apk/release/android-release.apk ~/build-root/client/android-${CORDOVA_ENV}.apk
+
+version: 2
 jobs:
-  clone_and_hash:
+  initialize:
     <<: *defaults
     steps:
       - checkout
-
       - run:
-          name: Initialize metadata
+          name: Initialize CI metadata
           command: |
             virtualenv blaenv
             blaenv/bin/pip install requests
             blaenv/bin/python .circleci/find_changed_projects.py
-
+            git pull --depth=1
+            git gc --prune=all
       - persist_to_workspace:
           root: .
           paths:
             - .
-  client:
-    <<: *defaults
-    working_directory: ~/build-root/client
+
+  client-dependencies:
+    <<: *client_defaults
+    steps:
+      - attach_workspace:
+          at: ~/build-root
+      - restore_cache:
+          keys:
+          - v1-client-dependencies-{{ checksum "package.json" }}
+          - v1-client-dependencies-
+      - run:
+          name: yarn
+          command: |
+            if [ -e ci_meta/not_changed ] && [ -e ci_meta/success ]; then
+              exit 0
+            fi
+            yarn
+      - save_cache:
+          paths:
+            - ~/build-root/client/node_modules
+          key: v1-client-dependencies-{{ checksum "package.json" }}
+
+
+  client-test:
+    <<: *client_defaults
+    steps:
+      - attach_workspace:
+          at: ~/build-root
+      - restore_cache:
+          key: v1-client-dependencies-{{ checksum "package.json" }}
+      - run:
+          environment:
+            JEST_JUNIT_OUTPUT: test-reports/junit.xml
+          command: |
+            mkdir -p test-reports
+            if [ -e ci_meta/not_changed ] && [ -e ci_meta/success ]; then
+              exit 0
+            fi
+            yarn add jest-junit
+            yarn test \
+              --ci \
+              --runInBand \
+              --testResultsProcessor="./node_modules/jest-junit"
+            bash <(curl -s https://codecov.io/bash)
+      - store_test_results:
+          path: test-reports
+      - store_artifacts:
+          path: test-reports
+
+  client-lint:
+    <<: *client_defaults
+    steps:
+      - attach_workspace:
+          at: ~/build-root
+      - restore_cache:
+          key: v1-client-dependencies-{{ checksum "package.json" }}
+      - run:
+          command: |
+            if [ -e ci_meta/not_changed ] && [ -e ci_meta/success ]; then
+              exit 0
+            fi
+            yarn lint
+
+  client-build-dev:
+    <<: *client_defaults
+    steps:
+      - attach_workspace:
+          at: ~/build-root
+      - restore_cache:
+          key: v1-client-dependencies-{{ checksum "package.json" }}
+      - run:
+          environment:
+            KARROT_THEME: dev
+          command: |
+            if [ -e ci_meta/not_changed ] && [ -e ci_meta/success ]; then
+              exit 0
+            fi
+            rm -r dist || true
+            yarn build
+            mv dist dist-dev
+      - persist_to_workspace:
+          root: ~/build-root/client
+          paths:
+            - dist-dev
+
+  client-deploy-dev:
+    <<: *client_defaults
     steps:
       - attach_workspace:
           at: ~/build-root
       - run:
-          name: Check whether client changed
           command: |
             if [ -e ci_meta/not_changed ] && [ -e ci_meta/success ]; then
-             exit 0
-            else
-              echo "run tests"
+              exit 0
             fi
+            sudo apt install -y rsync
+            ./deploy.sh "${CIRCLE_BRANCH}" "${CIRCLE_BRANCH}"
 
+  client-build-prod:
+    <<: *client_defaults
+    steps:
+      - attach_workspace:
+          at: ~/build-root
+      - restore_cache:
+          key: v1-client-dependencies-{{ checksum "package.json" }}
       - run:
-          name: Install dependencies
-          command: echo "install"
+          command: |
+            if [ -e ci_meta/not_changed ] && [ -e ci_meta/success ]; then
+              exit 0
+            fi
+            rm -r dist || true
+            yarn build
+            mv dist dist-prod
+      - persist_to_workspace:
+          root: ~/build-root/client
+          paths:
+            - dist-prod
 
+  client-deploy-prod:
+    <<: *client_defaults
+    steps:
+      - attach_workspace:
+          at: ~/build-root
       - run:
-          name: Build
-          command: echo "Building Client"
+          command: |
+            if [ -e ci_meta/not_changed ] && [ -e ci_meta/success ]; then
+              exit 0
+            fi
+            sudo apt install -y rsync
+            ./deploy.sh "${CIRCLE_BRANCH}" release
 
+  client-build-storybook:
+    <<: *client_defaults
+    steps:
+      - attach_workspace:
+          at: ~/build-root
+      - restore_cache:
+          key: v1-client-dependencies-{{ checksum "package.json" }}
       - run:
-          name: Test
-          command: ./run-test.sh
+          command: |
+            if [ -e ci_meta/not_changed ] && [ -e ci_meta/success ]; then
+              exit 0
+            fi
+            yarn build-storybook
+      - persist_to_workspace:
+          root: ~/build-root/client
+          paths:
+            - storybook-static
 
-  server:
+  client-build-cordova-dev:
+    <<: *client_defaults
+    steps:
+      - attach_workspace:
+          at: ~/build-root
+      - restore_cache:
+          key: v1-client-dependencies-{{ checksum "package.json" }}
+      - run:
+          command: |
+            if [ -e ci_meta/not_changed ] && [ -e ci_meta/success ]; then
+              exit 0
+            fi
+            rm -r dist || true
+            yarn build:cordova:dev
+            mv dist dist-app-dev
+      - persist_to_workspace:
+          root: ~/build-root/client
+          paths:
+            - dist-app-dev
+
+  client-build-cordova-prod:
+    <<: *client_defaults
+    steps:
+      - attach_workspace:
+          at: ~/build-root
+      - restore_cache:
+          key: v1-client-dependencies-{{ checksum "package.json" }}
+      - run:
+          command: |
+            if [ -e ci_meta/not_changed ] && [ -e ci_meta/success ]; then
+              exit 0
+            fi
+            rm -r dist || true
+            yarn build:cordova:prod
+            mv dist dist-app-dev
+      - persist_to_workspace:
+          root: ~/build-root/client
+          paths:
+            - dist-app-prod
+
+  client-build-android-dev:
+    <<: *android-defaults
+    steps:
+      - attach_workspace:
+          at: ~/build-root
+      - restore_cache:
+          keys:
+            - v1-gradle-{{ .Branch }}
+            - v1-gradle
+      - run:
+          <<: *build-android
+          name: build android apk
+          environment:
+            CORDOVA_ENV: dev
+            PASSWORD_VAR: CORDOVA_DEV_PASSWORD
+      - save_cache:
+          key: v1-gradle-{{ .Branch }}-{{ epoch }}
+      - persist_to_workspace:
+          root: ~/build-root/client
+          paths:
+            - android-dev.apk
+
+  client-deploy-android-dev:
+    <<: *client_defaults
+    steps:
+      - attach_workspace:
+          at: ~/build-root
+      - run:
+          command: |
+            if [ -e ci_meta/not_changed ] && [ -e ci_meta/success ]; then
+              exit 0
+            fi
+            sudo apt install -y rsync
+            ./deploy-android.sh "${CIRCLE_BRANCH}" android-dev.apk "${CIRCLE_BRANCH}"
+
+  client-build-android-prod:
+    <<: *android-defaults
+    steps:
+      - attach_workspace:
+          at: ~/build-root
+      - restore_cache:
+          keys:
+            - v1-gradle-{{ .Branch }}
+            - v1-gradle
+      - run:
+          <<: *build-android
+          name: build android apk
+          environment:
+            CORDOVA_ENV: prod
+            PASSWORD_VAR: CORDOVA_DEV_PASSWORD
+      - save_cache:
+          key: v1-gradle-{{ .Branch }}-{{ epoch }}
+      - persist_to_workspace:
+          root: ~/build-root/client
+          paths:
+            - android-prod.apk
+
+  client-deploy-android-prod:
+    <<: *client_defaults
+    steps:
+      - attach_workspace:
+          at: ~/build-root
+      - run:
+          command: |
+            if [ -e ci_meta/not_changed ] && [ -e ci_meta/success ]; then
+              exit 0
+            fi
+            sudo apt install -y rsync
+            /deploy-android.sh "${CIRCLE_BRANCH}" android-prod.apk release
+
+  server-test:
+    <<: *defaults
+    working_directory: ~/build-root/server
+    docker:
+      - image: karrot/python:1.5
+        environment:
+          PGHOST: 127.0.0.1
+      - image: circleci/postgres:9.6.2
+        environment:
+          POSTGRES_USER: ubuntu
+          POSTGRES_DB: fstool_e2etest
+      - image: redis:3.2.11
+    steps:
+      - attach_workspace:
+          at: ~/build-root
+      - restore_cache:
+          key: python-cache-{{ checksum "requirements.txt" }}-{{ checksum "requirements-dev.txt" }}
+          key: python-cache-{{ checksum "requirements.txt" }}-
+          key: python-cache-
+      - run:
+          name: configure and run tests
+          environment:
+            LC_ALL: C.UTF-8
+            LANG: C.UTF-8
+          command: |
+            mkdir -p test-reports
+            if [ -e ci_meta/not_changed ] && [ -e ci_meta/success ]; then
+              exit 0
+            fi
+            test -d env/bin || virtualenv -p python3 env
+            source env/bin/activate
+            pip install --upgrade pip
+            pip install --upgrade pip-tools
+            pip-sync requirements*.txt
+            cp config/local_settings.py.ci config/local_settings.py
+            (cd mjml && yarn)
+            mjml/convert
+            pytest -n 4 --cov=foodsaving --cov-report xml --junitxml=test-reports/junit.xml
+            flake8 ./
+            pip install codecov && codecov
+      - store_test_results:
+          path: test-reports
+      - store_artifacts:
+          path: test-reports
+      - save_cache:
+          paths:
+            - env
+            - ~/.cache/pip
+          key: python-cache-{{ checksum "requirements.txt" }}-{{ checksum "requirements-dev.txt" }}
+
+  server-deploy-dev:
     <<: *defaults
     working_directory: ~/build-root/server
     steps:
       - attach_workspace:
           at: ~/build-root
       - run:
-          name: Check whether server changed
           command: |
             if [ -e ci_meta/not_changed ] && [ -e ci_meta/success ]; then
-             exit 0
-            else
-              echo "run tests"
+              exit 0
             fi
+            ./deploy.sh karrot-dev
 
-      - run:
-          name: Install dependencies
-          command: echo "install"
-
-      - run:
-          name: Build
-          command: echo "Building Server"
-
-      - run:
-          name: Test
-          command: ./run-test.sh
-
-  docs:
+  server-deploy-karrot-world:
     <<: *defaults
+    working_directory: ~/build-root/server
+    steps:
+      - attach_workspace:
+          at: ~/build-root
+      - run:
+          command: |
+            if [ -e ci_meta/not_changed ] && [ -e ci_meta/success ]; then
+              exit 0
+            fi
+            ./deploy.sh karrot-world
+
+  docs-build:
+    <<: *client_defaults
     working_directory: ~/build-root/docs
     steps:
       - attach_workspace:
           at: ~/build-root
       - run:
-          name: Check whether docs changed
           command: |
             if [ -e ci_meta/not_changed ] && [ -e ci_meta/success ]; then
-             exit 0
-            else
-              echo "run tests"
+              exit 0
             fi
+            yarn build-docs
+      - persist_to_workspace:
+          root: ~/build-root/docs
+          paths:
+            - docs-dist
 
+  docs-deploy:
+    <<: *client_defaults
+    working_directory: ~/build-root/docs
+    steps:
+      - attach_workspace:
+          at: ~/build-root
       - run:
-          name: Install dependencies
-          command: echo "install"
+          command: |
+            if [ -e ci_meta/not_changed ] && [ -e ci_meta/success ]; then
+              exit 0
+            fi
+            ./deploy.sh master
 
+  end-to-end:
+    <<: *defaults
+    working_directory: ~/build-root/server
+    docker:
+      - image: karrot/python:1.5
+        environment:
+          PGHOST: 127.0.0.1
+      - image: circleci/postgres:9.6.2
+        environment:
+          POSTGRES_USER: ubuntu
+          POSTGRES_DB: fstool_e2etest
+      - image: redis:3.2.11
+    steps:
+      - attach_workspace:
+          at: ~/build-root
+      - restore_cache:
+          key: python-cache-{{ checksum "requirements.txt" }}-{{ checksum "requirements-dev.txt" }}
+          key: python-cache-{{ checksum "requirements.txt" }}-
+          key: python-cache-
       - run:
-          name: Build
-          command: echo "Building docs"
-
+          name: run backend
+          background: true
+          environment:
+            LC_ALL: C.UTF-8
+            LANG: C.UTF-8
+          command: |
+            if [ -e ci_meta/not_changed ] && [ -e ci_meta/success ] && [ -e ../client/ci_meta/not_changed ] && [ -e ../client/ci_meta/success ]; then
+              exit 0
+            fi
+            cp config/local_settings.py.ci config/local_settings.py
+            (cd mjml && yarn)
+            mjml/convert
+            python manage.py migrate
+            python manage.py runserver
       - run:
-          name: Test
-          command: ./run-test.sh
+          name: run frontend
+          background: true
+          command: |
+            if [ -e ci_meta/not_changed ] && [ -e ci_meta/success ] && [ -e ../client/ci_meta/not_changed ] && [ -e ../client/ci_meta/success ]; then
+              exit 0
+            fi
+            cd ../client
+            mv dist-dev dist
+            yarn serve
+      - run:
+          name: list all available browsers for your personal benefit
+          background: true
+          command: |
+            cd ../client
+            $(yarn bin)/testcafe -b saucelabs
+      - run:
+          name: testcafe
+          command: |
+            if [ -e ci_meta/not_changed ] && [ -e ci_meta/success ] && [ -e ../client/ci_meta/not_changed ] && [ -e ../client/ci_meta/success ]; then
+              exit 0
+            fi
+            apt-get install wget
+            wget --retry-connrefused -T 30 http://localhost:8000/api/groups-info/
+            cd ../client
+            yarn e2e --ci
 
 workflows:
   version: 2
 
-  build_test_deploy:
+  karrot_united:
     jobs:
-      - clone_and_hash
-      - client:
+      - initialize
+      - client-dependencies:
           requires:
-            - clone_and_hash
-      - server:
+            - initialize
+      - client-test:
           requires:
-            - clone_and_hash
-      - docs:
+            - client-dependencies
+      - client-lint:
           requires:
-            - clone_and_hash
+            - client-dependencies
+      - client-build-dev:
+          requires:
+            - client-dependencies
+      - client-build-storybook:
+          requires:
+            - client-dependencies
+      - client-deploy-dev:
+          filters:
+            branches:
+              only:
+                - master
+          requires:
+            - client-test
+            - client-lint
+            - client-build-dev
+            - client-build-storybook
+      - client-build-cordova-dev:
+          requires:
+            - client-dependencies
+      - client-build-android-dev:
+          requires:
+            - client-build-cordova-dev
+      - client-deploy-android-dev:
+          requires:
+            - client-test
+            - client-lint
+            - client-build-android-dev
+      - production-approval:
+          type: approval
+          requires:
+            - client-deploy-dev
+            - server-deploy-dev
+            - end-to-end
+      - client-build-prod:
+          requires:
+            - production-approval
+      - client-deploy-prod:
+          requires:
+            - client-build-prod
+      - client-build-cordova-prod:
+          requires:
+            - production-approval
+      - client-build-android-prod:
+          requires:
+            - client-build-cordova-prod
+      - client-deploy-android-prod:
+          requires:
+            - client-build-android-prod
+      - server-test:
+          requires:
+            - initialize
+      - server-deploy-dev:
+          filters:
+            branches:
+              only:
+                - master
+          requires:
+            - server-test
+      - server-deploy-karrot-world:
+          requires:
+            - production-approval
+      - docs-build:
+          requires:
+            - initialize
+      - docs-deploy:
+          filters:
+            branches:
+              only:
+                - master
+          requires:
+            - docs-build
+      - end-to-end:
+          requires:
+            - client-build-dev
+            - server-test
