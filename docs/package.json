@@ -20,7 +20,7 @@
   "bugs": "https://github.com/yunity/karrot-frontend/issues",
   "scripts": {
     "docs": "gitbook install && gitbook serve",
-    "build-docs": "gitbook install && gitbook build docs-dist"
+    "build-docs": "gitbook install && gitbook build"
   },
   "devDependencies": {
     "gitbook-cli": "^2.3.2"

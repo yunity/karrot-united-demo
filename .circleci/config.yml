@@ -68,7 +68,6 @@ jobs:
             - ~/build-root/client/node_modules
           key: v1-client-dependencies-{{ checksum "package.json" }}
 
-
   client-test:
     <<: *client_defaults
     steps:
@@ -402,6 +401,7 @@ jobs:
             fi
             yarn
             yarn build-docs
+            mv _book docs-dist
       - save_cache:
           key: v1-docs-{{ checksum "package.json" }}-{{ checksum "book.json" }}
           paths:
