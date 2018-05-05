@@ -22,7 +22,7 @@ build-android: &build-android
     fi
     rm -f cordova/www
     mv dist-app-${CORDOVA_ENV} cordova/www
-    cd ~/build-root/client/cordova
+    cd cordova
     rm -f config/current
     ln -s "$CORDOVA_ENV" config/current
     cordova platform add android
@@ -134,9 +134,9 @@ jobs:
             yarn build
             mv dist dist-dev
       - persist_to_workspace:
-          root: ~/build-root/client
+          root: ~/build-root
           paths:
-            - dist-dev
+            - client/dist-dev
 
   client-deploy-dev:
     <<: *client-defaults
@@ -171,9 +171,9 @@ jobs:
             yarn build
             mv dist dist-prod
       - persist_to_workspace:
-          root: ~/build-root/client
+          root: ~/build-root
           paths:
-            - dist-prod
+            - client/dist-prod
 
   client-deploy-prod:
     <<: *client-defaults
@@ -206,9 +206,9 @@ jobs:
             fi
             yarn build-storybook
       - persist_to_workspace:
-          root: ~/build-root/client
+          root: ~/build-root
           paths:
-            - storybook-static
+            - client/storybook-static
 
   client-build-cordova-dev:
     <<: *client-defaults
@@ -228,9 +228,9 @@ jobs:
             yarn build:cordova:dev
             mv dist dist-app-dev
       - persist_to_workspace:
-          root: ~/build-root/client
+          root: ~/build-root
           paths:
-            - dist-app-dev
+            - client/dist-app-dev
 
   client-build-cordova-prod:
     <<: *client-defaults
@@ -250,9 +250,9 @@ jobs:
             yarn build:cordova:prod
             mv dist dist-app-dev
       - persist_to_workspace:
-          root: ~/build-root/client
+          root: ~/build-root
           paths:
-            - dist-app-prod
+            - client/dist-app-prod
 
   client-build-android-dev:
     <<: *android-defaults
@@ -275,9 +275,9 @@ jobs:
             - ~/.gradle
             - ~/.android
       - persist_to_workspace:
-          root: ~/build-root/client
+          root: ~/build-root
           paths:
-            - android-dev.apk
+            - client/android-dev.apk
 
   client-deploy-android-dev:
     <<: *client-defaults
@@ -311,10 +311,13 @@ jobs:
             PASSWORD_VAR: CORDOVA_DEV_PASSWORD
       - save_cache:
           key: v1-gradle-{{ .Branch }}-{{ epoch }}
-      - persist_to_workspace:
-          root: ~/build-root/client
           paths:
-            - android-prod.apk
+            - ~/.gradle
+            - ~/.android
+      - persist_to_workspace:
+          root: ~/build-root
+          paths:
+            - client/android-prod.apk
 
   client-deploy-android-prod:
     <<: *client-defaults
@@ -378,7 +381,7 @@ jobs:
           path: test-reports
       - save_cache:
           paths:
-            - env
+            - ~/build-root/server/env
             - ~/.cache/pip
           key: python-cache-{{ checksum "requirements.txt" }}-{{ checksum "requirements-dev.txt" }}
 
@@ -436,11 +439,11 @@ jobs:
       - save_cache:
           key: v1-docs-{{ checksum "package.json" }}-{{ checksum "book.json" }}
           paths:
-            - node_modules
+            - ~/build-root/docs/node_modules
       - persist_to_workspace:
-          root: ~/build-root/docs
+          root: ~/build-root
           paths:
-            - docs-dist
+            - docs/docs-dist
 
   docs-deploy:
     <<: *client-defaults
