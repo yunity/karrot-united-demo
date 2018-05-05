@@ -252,6 +252,9 @@ jobs:
             PASSWORD_VAR: CORDOVA_DEV_PASSWORD
       - save_cache:
           key: v1-gradle-{{ .Branch }}-{{ epoch }}
+          paths:
+            - ~/.gradle
+            - ~/.android
       - persist_to_workspace:
           root: ~/build-root/client
           paths:
@@ -387,12 +390,22 @@ jobs:
     steps:
       - attach_workspace:
           at: ~/build-root
+      - restore_cache:
+          keys:
+            - v1-docs-{{ checksum "package.json" }}-{{ checksum "book.json" }}
+            - v1-docs-{{ checksum "package.json" }}
+            - v1-docs-
       - run:
           command: |
             if [ -e ci_meta/not_changed ] && [ -e ci_meta/success ]; then
               exit 0
             fi
+            yarn
             yarn build-docs
+      - save_cache:
+          key: v1-docs-{{ checksum "package.json" }}-{{ checksum "book.json" }}
+          paths:
+            - node_modules
       - persist_to_workspace:
           root: ~/build-root/docs
           paths:

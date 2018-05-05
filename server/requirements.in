@@ -1,4 +1,3 @@
-coverage
 django[argon2]
 django-cors-headers
 django-enumfield==1.3b2
@@ -11,7 +10,7 @@ drf-nested-routers
 factory-boy
 hiredis
 markdown
-psycopg2
+psycopg2-binary
 redis
 flake8
 pytz
@@ -22,8 +21,16 @@ sparkpost
 django-influxdb-metrics
 django-timezone-field
 raven
-responses
 furl
-channels
+channels~=1.1
 asgi_redis
 pyfcm
+django-versatileimagefield
+html2text
+babel
+talon
+huey
+gevent
+bleach
+bleach_whitelist
+pymdown-extensions

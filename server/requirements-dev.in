@@ -3,3 +3,9 @@ ipython
 requests-mock
 tblib
 autopep8
+autoflake
+pytest-django
+pytest-xdist
+pytest-cov
+freezegun
+logging_tree
