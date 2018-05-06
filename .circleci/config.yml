@@ -1,12 +1,12 @@
 defaults: &defaults
   working_directory: ~/build-root
   docker:
-    - image: karrot/python:1.5
+    - image: karrot/python:1.6
 
 client-defaults: &client-defaults
   working_directory: ~/build-root/client
   docker:
-    - image: circleci/node:8.10
+    - image: karrot/python:1.6
 
 android-defaults: &android-defaults
   working_directory: ~/build-root/client
@@ -39,9 +39,7 @@ jobs:
       - run:
           name: Initialize CI metadata
           command: |
-            virtualenv blaenv
-            blaenv/bin/pip install requests
-            blaenv/bin/python .circleci/find_changed_projects.py
+            python3 .circleci/find_changed_projects.py
             git pull --depth=1
             git gc --prune=all
       - persist_to_workspace:
@@ -152,7 +150,6 @@ jobs:
               echo "skip step"
               exit 0
             fi
-            sudo apt install -y rsync
             ./deploy.sh "${CIRCLE_BRANCH}" "${CIRCLE_BRANCH}"
 
   client-build-prod:
@@ -190,7 +187,6 @@ jobs:
               echo "skip step"
               exit 0
             fi
-            sudo apt install -y rsync
             ./deploy.sh "${CIRCLE_BRANCH}" release
 
   client-build-storybook:
@@ -295,7 +291,6 @@ jobs:
               echo "skip step"
               exit 0
             fi
-            sudo apt install -y rsync
             ./deploy-android.sh "${CIRCLE_BRANCH}" android-dev.apk "${CIRCLE_BRANCH}"
 
   client-build-android-prod:
@@ -335,14 +330,13 @@ jobs:
               echo "skip step"
               exit 0
             fi
-            sudo apt install -y rsync
             /deploy-android.sh "${CIRCLE_BRANCH}" android-prod.apk release
 
   server-test:
     <<: *defaults
     working_directory: ~/build-root/server
     docker:
-      - image: karrot/python:1.5
+      - image: karrot/python:1.6
         environment:
           PGHOST: 127.0.0.1
       - image: circleci/postgres:9.6.2
@@ -370,15 +364,13 @@ jobs:
             fi
             test -d env/bin || virtualenv -p python3 env
             source env/bin/activate
-            pip install --upgrade pip
-            pip install --upgrade pip-tools
             pip-sync requirements*.txt
             cp config/local_settings.py.ci config/local_settings.py
             (cd mjml && yarn)
             mjml/convert
             pytest -n 4 --cov=foodsaving --cov-report xml --junitxml=test-reports/junit.xml
             flake8 ./
-            pip install codecov && codecov
+            codecov
       - store_test_results:
           path: test-reports
       - store_artifacts:
@@ -469,7 +461,7 @@ jobs:
     <<: *defaults
     working_directory: ~/build-root/server
     docker:
-      - image: karrot/python:1.5
+      - image: karrot/python:1.6
         environment:
           PGHOST: 127.0.0.1
       - image: circleci/postgres:9.6.2
@@ -495,6 +487,7 @@ jobs:
               echo "skip step"
               exit 0
             fi
+            source env/bin/activate
             cp config/local_settings.py.ci config/local_settings.py
             (cd mjml && yarn)
             mjml/convert
@@ -524,7 +517,6 @@ jobs:
               echo "skip step"
               exit 0
             fi
-            apt-get install wget
             wget --retry-connrefused -T 30 http://localhost:8000/api/groups-info/
             cd ../client
             yarn e2e --ci
